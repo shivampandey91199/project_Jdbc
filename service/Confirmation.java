@@ -1,0 +1,55 @@
+package service;
+
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
+public class Confirmation {
+	public void sendMail(String emailid, int bid) {
+		final String username = "Serviceweb308@gmail.com";
+		final String password = "hyatbrrankmqyxsa";
+
+		Properties props = new Properties();
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.port", "587");
+		props.put("mail.debug", "true");
+		props.put("mail.smtp.starttls.required", "true");
+		props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+//		587
+		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(username, password);
+			}
+		});
+
+		System.out.println("session complete");
+		try {
+			System.out.println("1");
+			Message message = new MimeMessage(session);
+			System.out.println("2");
+			message.setFrom(new InternetAddress(username));
+			System.out.println("3");
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailid));// to mail address.
+			System.out.println("4");
+			message.setSubject("Confirmation mail");
+			message.setText("Greeting of the day your booking is confirm your booking id is"+ bid);
+			System.out.println("5");
+			Transport.send(message);
+			System.out.println("Done");
+
+		} catch (MessagingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+
+
+}
